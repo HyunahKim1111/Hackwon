@@ -17,10 +17,12 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand" href="/">학원IN</a>
             <ul class="nav">
-                <li class="nav-item"><a href="/" class="active nav-link ">Home</a></li>
+                <li class="nav-item"><a href="{% url 'content:content'%}" class="active nav-link ">학원찾기</a></li>
+                <li class="nav-item"><a href="{% url 'blog:blog_list'%}" class="active nav-link ">커뮤니티</a></li>
+                <li class="nav-item"><a href="{ % url 'blog:blog_list'%}" class="active nav-link ">고객센터</a></li>
                 {% if user.is_authenticated %}
                 <li class="nav-item"><a href="#" class="nav-link">Welcome, {{user.get_username}}</a></li>
-                <li class="nav-item"><a href="{% url 'blog:blog_upload' %}" class="nav-link">업로드</a></li>
+                <li class="nav-item"><a href="{% url 'blog:blog_upload' %}" class="nav-link">글쓰기</a></li>
                 <li class="nav-item"><a href="{% url 'logout' %}" class="nav-link">로그아웃</a></li>
                 {% else %}
                 <li class="nav-item"><a href="{% url 'login' %}" class="nav-link">로그인</a></li>
