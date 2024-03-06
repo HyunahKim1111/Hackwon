@@ -1,22 +1,28 @@
 {% extends 'base.html' %}
 
-{% block title %}- List{% endblock %}
+{% block title %} - List {% endblock %}
 
 {% block content %}
+    <div class="row mb-3"> <!-- mb-3 클래스를 추가하여 버튼 아래 여백을 제공 -->
+        <div class="col-md-12 text-right"> <!-- 전체 너비를 사용하고 텍스트 오른쪽 정렬 -->
+            <a href="{% url 'blog:blog_upload' %}" class="btn btn-primary">글쓰기</a>
+        </div>
+    </div>
+
     {% for post in blogs %}
     <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-8 panel panel-default">
-            <p><img src="{{post.photo.url}}" style="width:100%;"></p>
+            <p><img src="{{ post.photo.url }}" style="width:100%;"></p>
             <button type="button" class="btn btn-xs btn-info">
-                {{post.author.username}}
+                {{ post.author.username }}
             </button>
-            <p>{{post.text|linebreaksbr}}</p>
+            <p>{{ post.text|linebreaksbr }}</p>
             <p class="text-right">
                 <a href="{% url 'blog:blog_detail' pk=post.id %}" class="btn btn-xs btn-success">댓글달기</a>
             </p>
         </div>
         <div class="col-md-2"></div>
     </div>
-    {% endfor%}
+    {% endfor %}
 {% endblock %}

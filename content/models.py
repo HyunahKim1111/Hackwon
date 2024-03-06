@@ -1,10 +1,10 @@
 from django.db import models
 from django.urls import reverse
+import os
 
 class Category(models.Model):
-    name = models.CharField(max_length=200, db_index=True, verbose_name='course_category')
-    meta_description = models.TextField(blank=True)
-    slug = models.SlugField(max_length=200, db_index=True, unique=True, allow_unicode=True)
+    name = models.CharField(max_length=200, unique=True, verbose_name='course_category')
+    slug = models.SlugField(max_length=200, unique=True, allow_unicode=True)
 
     class Meta:
         ordering = ['name']
@@ -18,14 +18,19 @@ class Category(models.Model):
         return reverse('content:hackwon_in_category', args=[self.slug])
 
 class Hackwon(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name='hackwons')
-    name = models.CharField(max_length=200, db_index=True)
-    slug = models.SlugField(max_length=200, db_index=True, unique=True, allow_unicode=True)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name='hackwons')
+    name = models.CharField(max_length=200)
+    slug = models.SlugField(max_length=200, unique=True, allow_unicode=True)
     image = models.ImageField(upload_to='hackwons/%Y/%m/%d', blank=True, null=True)
-    region = models.TextField(blank=True, null=True)
-    tuition = models.IntegerField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    meta_description = models.TextField(blank=True, null=True)
+    region = models.CharField(max_length=200, db_index=True, null=True)
+    tuition = models.CharField(max_length=200, db_index=True, null=True)
     course = models.CharField(max_length=200, db_index=True, null=True)
     dormitory_available = models.BooleanField(default=True)
+    phone_number = models.CharField(max_length=20, blank=True, null=True) 
+    latitude = models.FloatField(null=True, blank=True)  # 위도
+    longitude = models.FloatField(null=True, blank=True)  # 경도
 
     class Meta:
         index_together = [['id', 'slug']]
