@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'accounts',
     'disqus',
     'django.contrib.sites',
+    'cs',
 ]
 
 MIDDLEWARE = [
