@@ -22,5 +22,50 @@
         <strong>내용:</strong>
         <p>{{ question_detail.content }}</p>
     </div>
+    <ul>
+        {% for answer in question_detail.answers.all %}
+            <li>
+                {{ answer.content }} - <em>by {{ answer.author.username }}</em> at {{ answer.created|date:"Y-m-d H:i" }}
+                {% if request.user.is_authenticated and request.user.is_superuser %}  <!-- 관리자 확인 -->
+                    <!-- 삭제 버튼 추가 시작 -->
+                    <form action="{% url 'cs:answer_delete' answer.id %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <input type="submit" value="삭제" style="margin-left: 10px; background-color: red; color: white; border: none; cursor: pointer;">
+                    </form>
+                    <!-- 삭제 버튼 추가 끝 -->
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
 </div>
+
+{% if user.is_authenticated %}
+<form action="{% url 'cs:answer_create' question_detail.id %}" method="post" class="my-3">
+    {% csrf_token %}
+    <!-- 오류표시 시작 -->
+    {% if form.non_field_errors %}
+    <div class="alert alert-danger" role="alert">
+        {{ form.non_field_errors }}
+    </div>
+    {% endif %}
+    {% for field in form %}
+        <div class="form-group{% if field.errors %} has-danger{% endif %}">
+            {{ field.label_tag }}
+            {{ field }}
+            {% for error in field.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+    <!-- 오류표시 끝 -->
+    <button type="submit" class="btn btn-primary">답변등록</button>
+</form>
+{% else %}
+<div class="alert alert-info" role="alert">
+    답변을 등록하려면 <a href="{% url 'login' %}">로그인</a>해주세요.
+</div>
+{% endif %}
+
 {% endblock %}
