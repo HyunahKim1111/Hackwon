@@ -14,8 +14,9 @@ class Question(models.Model):
         ordering = ['-updated']  
 
     def __str__(self):
-        # author가 null일 수 있으므로, username 호출 전에 null 체크를 추가하는 것이 좋습니다.
-        return f"{self.author.username if self.author else 'Unknown Author'} {self.created.strftime('%Y-%m-%d %H:%M:%S')}"
+        author_name = self.author.username if self.author else 'Unknown Author'
+        created_time = self.created.strftime('%Y-%m-%d %H:%M:%S')
+        return f"{author_name} - {self.subject} ({created_time})"
 
 
 class Answer(models.Model):

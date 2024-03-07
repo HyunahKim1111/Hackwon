@@ -20,12 +20,12 @@ from django.conf import settings
 from content.views import index
 
 urlpatterns = [
-    path('', index, name='index'),
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
+    path('question/', include('cs.urls')),
     path('content/', include('content.urls')),
     path('blog/', include('blog.urls')),
-    
+    path('', index, name='index'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

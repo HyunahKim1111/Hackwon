@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ question_detail.subject }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>{{ question_detail.subject }}</h1>
+    <p>
+        {% if question_detail.author %}
+            <strong>작성자:</strong> {{ question_detail.author.username }}
+        {% else %}
+            <strong>작성자:</strong> 익명
+        {% endif %}
+        | <strong>작성시간:</strong> {{ question_detail.created|date:"Y-m-d H:i" }}
+    </p>
+    {% if question_detail.photo %}
+        <div>
+            <img src="{{ question_detail.photo.url }}" alt="{{ question_detail.subject }}" style="max-width: 500px; height: auto;">
+        </div>
+    {% endif %}
+    <div class="mt-3">
+        <strong>내용:</strong>
+        <p>{{ question_detail.content }}</p>
+    </div>
+</div>
+{% endblock %}

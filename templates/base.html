@@ -19,7 +19,7 @@
       <ul class="navbar-nav mx-auto"> <!-- 수정: 중앙에 위치할 항목들을 위한 컨테이너 -->
         <li class="nav-item"><a href="{% url 'content:hackwon_all'%}" class="active nav-link ">학원찾기</a></li>
         <li class="nav-item"><a href="{% url 'blog:blog_list'%}" class="active nav-link ">커뮤니티</a></li>
-        <li class="nav-item"><a href="{% url 'blog:blog_list'%}" class="active nav-link ">고객센터</a></li>
+        <li class="nav-item"><a href="{% url 'cs:question_list'%}" class="active nav-link ">고객센터</a></li>
       </ul>
       <ul class="navbar-nav ml-auto"> <!-- 수정: 오른쪽 끝에 위치할 항목들을 위한 컨테이너 -->
         {% if user.is_authenticated %}
