@@ -27,4 +27,5 @@ class AnswerForm(forms.ModelForm):
             'content': '답변내용',
         }
 
+
         

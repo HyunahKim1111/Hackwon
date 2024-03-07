@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.utils import timezone
 from django.contrib import messages # 사용자에게 메시지를 보여주기 위해 import
 from django.contrib.auth.models import User
 from .models import *
 from .forms import *
 from django.core.paginator import Paginator 
+from django.contrib.auth.decorators import login_required
 
 def question_list(request):
     question_list = Question.objects.all().order_by('-created')  # 질문을 최신순으로 정렬
@@ -72,3 +72,43 @@ def question_create(request):
     else:
         form = QuestionForm()
     return render(request, 'cs/question_form.html', {'form': form})
+
+
+def question_create(request):
+    if request.method == "POST":
+        form = QuestionForm(request.POST)
+        if form.is_valid():
+            new_question = form.save(commit=False)
+            # 로그인한 사용자가 있을 경우에만 author 필드를 설정
+            if request.user.is_authenticated:
+                new_question.author = request.user
+            new_question.save()
+            messages.success(request, "질문이 성공적으로 등록되었습니다.") 
+            return redirect('cs:question_detail', new_question.id)
+    else:
+        form = QuestionForm()
+    return render(request, 'cs/question_form.html', {'form': form})
+
+
+@login_required
+def question_update(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    if request.method == "POST":
+        form = QuestionForm(request.POST, instance=question)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "질문이 성공적으로 수정되었습니다.")
+            return redirect('cs:question_detail', question.id)  # 네임스페이스 반영
+    else:
+        form = QuestionForm(instance=question)
+    return render(request, 'cs/question_update.html', {'form': form, 'question': question})  # 경로 수정
+
+
+@login_required
+def question_delete(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    if request.method == "POST":
+        question.delete()
+        messages.success(request, "질문이 성공적으로 삭제되었습니다.")
+        return redirect('cs:question_list')  # 네임스페이스 반영
+    return render(request, 'cs/question_delete_confirm.html', {'question': question})  # 경로 수정
