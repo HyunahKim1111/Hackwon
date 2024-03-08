@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 import os
+from django.contrib.auth.models import User
 
 class Category(models.Model):
     name = models.CharField(max_length=200, unique=True, verbose_name='course_category')
@@ -31,6 +32,7 @@ class Hackwon(models.Model):
     phone_number = models.CharField(max_length=20, blank=True, null=True) 
     latitude = models.FloatField(null=True, blank=True)  # 위도
     longitude = models.FloatField(null=True, blank=True)  # 경도
+    voter = models.ManyToManyField(User, related_name='voted_hackwons') # 좋아요기능
 
     class Meta:
         index_together = [['id', 'slug']]
@@ -40,6 +42,7 @@ class Hackwon(models.Model):
     
     def get_absolute_url(self):
         return reverse('content:hackwon_detail', args=[self.id, self.slug])
+    
 
 
 

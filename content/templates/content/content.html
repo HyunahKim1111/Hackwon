@@ -33,6 +33,9 @@
                       {% if hackwon.dormitory_available %} <!-- 기숙사 여부를 표시하는 조건부 렌더링 추가 -->
                       <p class="card-text"><span class="badge badge-success">기숙사 있음</span></p>
                       {% endif %}
+                      <!-- 좋아요기능 시작 -->
+                      <button class="vote-btn" data-hackwon="{{ hackwon.id }}">추천 <span class="votes">{{ hackwon.voter.count }}</span></button>
+
                       <!-- 수정: URL을 가져오는 메서드의 이름 수정 -->
                       <a href="{{ hackwon.get_absolute_url }}" class="btn btn-primary">View Detail</a>
                     </div>
@@ -40,6 +43,33 @@
               </div>
       
           {% endfor %}
+          <!-- 좋아요 기능 시작 -->
+          <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                document.querySelectorAll('.vote-btn').forEach(function(button) {
+                    button.onclick = function() {
+                        var hackwonId = this.dataset.hackwon;
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("GET", "{% url 'content:hackwon_vote' 9999 %}".replace('9999', hackwonId), true);
+                        xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+                        xhr.onload = function() {
+                            if (this.status == 200) {
+                                var response = JSON.parse(this.responseText);
+                                var votesSpan = button.querySelector('.votes');
+                                votesSpan.textContent = response.total_votes;
+                                if (response.voted) {
+                                    button.classList.add('voted');
+                                } else {
+                                    button.classList.remove('voted');
+                                }
+                            }
+                        };
+                        xhr.send();
+                    }
+                });
+            });
+            </script>
+            <!-- 좋아요 기능 끝 -->
           </div>
       </div>
         </div>
