@@ -19,10 +19,57 @@
             </button>
             <p>{{ post.text|linebreaksbr }}</p>
             <p class="text-right">
+                <div>
+                    <a href="javascript:void(0)" data-url="{% url 'blog:blog_like' post.id %}" class="like-btn">❤️ <span class="like-count">{{ post.likes.count }}</span></a>
+                </div>
                 <a href="{% url 'blog:blog_detail' pk=post.id %}" class="btn btn-xs btn-success">댓글달기</a>
             </p>
         </div>
         <div class="col-md-2"></div>
     </div>
     {% endfor %}
+
+    <!-- 좋아요기능 -->
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const likeButtons = document.querySelectorAll('.like-btn');
+            likeButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    const url = this.dataset.url;
+                    fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCookie('csrftoken'),
+                        },
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        const likeCountSpan = this.querySelector('.like-count');
+                        likeCountSpan.textContent = data.total_likes;
+                        this.innerHTML = data.liked ? '❤️ ' : '🤍 ';
+                        this.appendChild(likeCountSpan);
+                    })
+                    .catch(error => console.error('Error:', error));
+                });
+            });
+        });
+        </script>
+    <!-- 좋아요기능 끝 -->
 {% endblock %}

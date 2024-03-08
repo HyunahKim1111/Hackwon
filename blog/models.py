@@ -8,6 +8,7 @@ class Blog(models.Model):
     text = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    likes = models.ManyToManyField(User, related_name='blog_likes', blank=True)
 
     class Meta:
         ordering = ['-updated']
@@ -17,3 +18,8 @@ class Blog(models.Model):
 
     def get_absolute_url(self):
         return reverse('blog:blog_detail', args=[self.id])
+
+    def total_likes(self):
+        return self.likes.count()
+    
+    
