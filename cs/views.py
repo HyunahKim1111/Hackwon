@@ -46,7 +46,7 @@ def question_detail(request, question_id):
     form = AnswerForm()  # 답변 등록 폼 인스턴스 생성
     return render(request, 'cs/question_detail.html', {'question_detail': question, 'form': form})
 
-
+@login_required
 def answer_delete(request, answer_id):
     if request.user.is_authenticated and request.user.is_superuser:  # 관리자 권한 확인
         answer = get_object_or_404(Answer, pk=answer_id)

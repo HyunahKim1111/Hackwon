@@ -23,10 +23,10 @@
     <!-- 수정삭제 추가 -->
 {% if user.is_authenticated and question_detail.author == user %}
 <div class="edit-delete-buttons my-3">
-    <a href="{% url 'cs:question_update' question_detail.id %}" class="btn btn-secondary">수정하기</a>
+    <a href="{% url 'cs:question_update' question_detail.id %}" class="btn btn-secondary">수정</a>
     <form action="{% url 'cs:question_delete' question_detail.id %}" method="post" style="display:inline;">
         {% csrf_token %}
-        <input type="submit" value="삭제하기" class="btn btn-danger" onclick="return confirm('정말 삭제하시겠습니까?');">
+        <input type="submit" value="삭제" class="btn btn-danger" onclick="return confirm('정말 삭제하시겠습니까?');">
     </form>
 </div>
 {% endif %}
