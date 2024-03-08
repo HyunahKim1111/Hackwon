@@ -3,8 +3,17 @@
 {% block title %} - List {% endblock %}
 
 {% block content %}
-    <div class="row mb-3"> <!-- mb-3 클래스를 추가하여 버튼 아래 여백을 제공 -->
-        <div class="col-md-12 text-right"> <!-- 전체 너비를 사용하고 텍스트 오른쪽 정렬 -->
+    <div class="row mb-3"> 
+        <div class="col-md-12 text-right"> 
+        <!-- 검색기능 -->
+        <form method="GET" action="{% url 'blog:blog_list' %}">
+            <div class="form-group">
+                <input type="text" name="q" class="form-control" placeholder="Search..." value="{{ query }}">
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+        <!-- 검색기능 끝 -->
+        <hr>
             <a href="{% url 'blog:blog_upload' %}" class="btn btn-primary">글쓰기</a>
         </div>
     </div>

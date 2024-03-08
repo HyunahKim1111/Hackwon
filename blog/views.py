@@ -8,12 +8,18 @@ from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
-
+from django.db.models import Q
 
 @login_required
 def blog_list(request):
-    blogs = Blog.objects.all()
-    return render(request, 'blog/list.html', {'blogs':blogs})
+    query = request.GET.get('q', '')
+    if query:
+        blogs = Blog.objects.filter(
+            Q(text__icontains=query) | Q(author__username__icontains=query)
+        ).distinct()
+    else:
+        blogs = Blog.objects.all()
+    return render(request, 'blog/list.html', {'blogs': blogs, 'query': query})
 
 class BlogDetailView(LoginRequiredMixin, DetailView):
     model = Blog
@@ -56,4 +62,3 @@ def blog_like(request, pk):
         blog.likes.add(request.user)
         liked = True
     return JsonResponse({'total_likes': blog.likes.count(), 'liked': liked})
-

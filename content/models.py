@@ -16,7 +16,7 @@ class Category(models.Model):
         return self.name
     
     def get_absolute_url(self):
-        return reverse('content:hackwon_in_category', args=[self.slug])
+        return reverse('content:hackwon_in_category', args=[self.id])
 
 class Hackwon(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name='hackwons')
@@ -41,7 +41,10 @@ class Hackwon(models.Model):
         return self.name
     
     def get_absolute_url(self):
-        return reverse('content:hackwon_detail', args=[self.id, self.slug])
+        return reverse('content:hackwon_detail', args=[self.id])
+    
+
+
     
 
 

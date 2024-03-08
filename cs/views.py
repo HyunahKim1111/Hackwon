@@ -5,15 +5,26 @@ from .models import *
 from .forms import *
 from django.core.paginator import Paginator 
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
+#검색기능 추가
 def question_list(request):
-    question_list = Question.objects.all().order_by('-created')  # 질문을 최신순으로 정렬
-    paginator = Paginator(question_list, 5)  # 페이지당 15개씩 보여주기
-
-    page_number = request.GET.get('page')  # URL에서 페이지 번호를 가져옴
+    search_query = request.GET.get('q', '')  # Get the search parameter q from the URL
+    if search_query:
+        question_list = Question.objects.filter(
+            Q(subject__icontains=search_query) | 
+            Q(content__icontains=search_query) | 
+            Q(author__username__icontains=search_query) | 
+            Q(answers__content__icontains=search_query)
+        ).distinct().order_by('-created')  # Use distinct() to avoid duplicate results
+    else:
+        question_list = Question.objects.all().order_by('-created')
+    
+    paginator = Paginator(question_list, 5)
+    page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, 'cs/question_list.html', {'question_list': page_obj})
+    return render(request, 'cs/question_list.html', {'question_list': page_obj, 'search_query': search_query})
 
 
 def question_detail(request, question_id):
@@ -112,3 +123,5 @@ def question_delete(request, question_id):
         messages.success(request, "질문이 성공적으로 삭제되었습니다.")
         return redirect('cs:question_list')  # 네임스페이스 반영
     return render(request, 'cs/question_delete_confirm.html', {'question': question})  # 경로 수정
+
+

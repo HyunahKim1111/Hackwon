@@ -5,6 +5,14 @@
 
 {% block content %}
 <div class="container">
+    <!-- Search form -->
+    <form method="get" action="{% url 'cs:question_list' %}">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Search for questions or answers..." name="q" value="{{ search_query }}">
+            <button class="btn btn-outline-secondary" type="submit">Search</button>
+        </div>
+    </form>
+
     <h2>Question List</h2>
     {% if question_list %}
     <ul>

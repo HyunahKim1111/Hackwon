@@ -20,24 +20,6 @@
             {% if hackwon.phone_number %}
                 <p><span class="badge badge-secondary">Phone Number</span> {{ hackwon.phone_number }}</p>
             {% endif %}
-            <!-- 지도 표시 (Google Maps 예시)
-            {% if hackwon.latitude and hackwon.longitude %}
-                <div id="map" style="height: 400px; width: 100%;"></div>
-                <script>
-                    function initMap() {
-                        var location = {lat: {{ hackwon.latitude }}, lng: {{ hackwon.longitude }}};
-                        var map = new google.maps.Map(document.getElementById('map'), {
-                            zoom: 15,
-                            center: location
-                        });
-                        var marker = new google.maps.Marker({
-                            position: location,
-                            map: map
-                        });
-                    }
-                </script>
-                <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script>
-            {% endif %} -->
             <h5><span class="badge badge-secondary">Description</span>{{ hackwon.description|linebreaks }}</h5>
         </div>
     </div>

@@ -1,49 +1,51 @@
 {% extends 'base.html' %}
 {% block title %}Category Page{% endblock %}
 {% block content %}
-
-
-    <div class="row">
-        <div class="col-2">
-            <div class="list-group">
-                <a href="/" class="list-group-item {% if not current_category %}active{% endif %}">All</a>
-                {% for c in categories %}
-                    <a href="{{c.get_absolute_url}}" class="list-group-item {% if current_category.slug == c.slug %}active{% endif %}">{{c.name}}</a>
-                {% endfor %}
-            </div>
+<div class="row">
+    <div class="col-2">
+        <!-- Category Sidebar -->
+        <div class="list-group">
+            <a href="/" class="list-group-item {% if not current_category %}active{% endif %}">All</a>
+            {% for c in categories %}
+            <a href="{{ c.get_absolute_url }}" class="list-group-item {% if current_category.slug == c.slug %}active{% endif %}">{{ c.name }}</a>
+            {% endfor %}
         </div>
-
-
-        <div class="col">
-          <div class="alert alert-info" role="alert">
+    </div>
+    <div class="col">
+      <!-- 검색기능 -->
+      <form method="get" action=".">
+        <input type="text" name="q" placeholder="원하는 학원을 검색해보세요." value="{{ request.GET.q }}">
+        <button type="submit">Search</button>
+      </form>
+      <!-- 검색기능 -->
+        <!-- Category or All Hackwons Heading -->
+        <div class="alert alert-info" role="alert">
             {% if current_category %}{{ current_category.name }}{% else %}All Hackwons{% endif %}
-          </div>
-          <div class="row">
-          {% for hackwon in hackwons %}
-      
-              <div class="col-4">
-                  <div class="card">
+        </div>
+        <div class="row">
+            {% for hackwon in hackwons %}
+            <div class="col-4">
+                <div class="card">
                     {% if hackwon.image %}
-                    <img class="card-img-top" src="{{ hackwon.image.url }}" alt="Hackwon Image"> <!-- 수정: alt 속성의 텍스트 변경 -->
+                    <a href="{% url 'content:hackwon_detail' hackwon.id %}"><img class="card-img-top" src="{{ hackwon.image.url }}" alt="{{ hackwon.name }}"></a>
                     {% endif %}
                     <div class="card-body">
-                      <h5 class="card-title">{{ hackwon.name }}</h5>
-                      <!-- 아래 줄은 수정되었습니다: product를 hackwon으로 변경, description과 price 대신 적절한 필드 사용 -->
-                      <p class="card-text">{{ hackwon.region }} <span class="badge badge-secondary">{{ hackwon.tuition }}원</span></p>
-                      {% if hackwon.dormitory_available %} <!-- 기숙사 여부를 표시하는 조건부 렌더링 추가 -->
-                      <p class="card-text"><span class="badge badge-success">기숙사 있음</span></p>
-                      {% endif %}
-                      <!-- 좋아요기능 시작 -->
-                      <button class="vote-btn" data-hackwon="{{ hackwon.id }}">추천 <span class="votes">{{ hackwon.voter.count }}</span></button>
-
-                      <!-- 수정: URL을 가져오는 메서드의 이름 수정 -->
-                      <a href="{{ hackwon.get_absolute_url }}" class="btn btn-primary">View Detail</a>
+                        <!-- Hackwon Name as Link -->
+                        <h5 class="card-title">
+                            <a href="{% url 'content:hackwon_detail' hackwon.id %}">{{ hackwon.name }}</a>
+                        </h5>
+                        <!-- Hackwon Details -->
+                        <p class="card-text">{{ hackwon.region }}</p>
+                        <p class="badge badge-secondary">{{ hackwon.tuition }}원</p>
+                        {% if hackwon.dormitory_available %}
+                        <p class="card-text"><span class="badge badge-success">기숙사 있음</span></p>
+                        {% endif %}
+                        <button class="vote-btn" data-hackwon="{{ hackwon.id }}">추천 <span class="votes">{{ hackwon.voter.count }}</span></button>
                     </div>
-                  </div>
-              </div>
-      
-          {% endfor %}
-          <!-- 좋아요 기능 시작 -->
+                </div>
+            </div>
+            {% endfor %}          
+<!-- 좋아요 기능 시작 -->
           <script>
             document.addEventListener("DOMContentLoaded", function() {
                 document.querySelectorAll('.vote-btn').forEach(function(button) {
