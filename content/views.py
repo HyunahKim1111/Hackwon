@@ -4,8 +4,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.db.models import Q
 
-def index(request): # 메인페이지
-    return render(request, 'content/index.html')
+# def index(request): # 메인페이지
+#     return render(request, 'content/index.html')
 
 def hackwon_in_category(request, category_id=None):
     current_category = None
