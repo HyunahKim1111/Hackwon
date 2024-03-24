@@ -1,0 +1,18 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="{% static 'style/navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'style/reset.css' %}">
+    <title>{% block title %}학원IN{% endblock %}</title>
+    
+</head>
+
+<body>
+  {% block header %}{% endblock header %}
+  {% block content %}{% endblock content %}
+  {% block footer %}{% endblock footer %}
+</body>
+</html>
