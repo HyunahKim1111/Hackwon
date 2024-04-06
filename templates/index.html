@@ -1,13 +1,35 @@
 {% extends 'base/base_with_navbar.html' %}
 
+{% load static %}
+
 {% block title %}- Landing{% endblock %}
 
 {% block content %}
-    <div class="row">
-        <div class="col-md-2"></div>
-        <div class="col-md-8 panel panel-default">
-            <p>대문 프론트 먼저 꾸며줘. 잘 모르겠으면 로켓펀치나 카팅 메인페이지 참고</p>
+<main class="site-body index">
+    <div class="main-header">
+        <div class="fg"></div>
+        <div class="content">
+            <h1>멘트</h1>
+            <h1>멘트</h1>
+            <h1>멘트</h1>
         </div>
-        <div class="col-md-2"></div>
+        <div class="index-list max-content-width">
+            <div class="contents">
+                <dl>
+                    <dl>
+                        <dt><h1>자녀에게 맞는 학원 찾기!</h1></dt>
+                        <dt><h2>어떤학원을 찾을지 고민된다면</h2></dt>
+                        <dt><h2>class in에서 찾아주세요</h2></dt>
+                    </dl>
+                </dl>
+                <div class="sidecontents">
+                    <figure>
+                        <img src="{% static 'assets/emoji-banner.png' %}" alt="">
+                    </figure>
+                </div>
+            </div>
+
+        </div>
     </div>
+</main>
 {% endblock %}
